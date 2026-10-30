@@ -21,6 +21,12 @@
   --accent-soft: #d5ece9;
   --accent-fg: #ffffff;
   --warn: #9a5b00;
+  --t-low: #2f5fa8;
+  --t-low-bg: #dfe8f6;
+  --t-ok: #23753a;
+  --t-ok-bg: #dcefe0;
+  --t-high: #8a5a00;
+  --t-high-bg: #f5ead0;
   --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body: "Manrope", "Segoe UI", system-ui, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
@@ -29,12 +35,14 @@
   :root:not([data-theme="light"]) {
     --bg: #0f1716; --surface: #172221; --fg: #e5eeec; --muted: #94a6a3; --line: #2a3a38;
     --enamel: #e9e6da; --enamel-edge: #7f8f8c; --accent: #4fc2b8; --accent-soft: #1d3d3a; --accent-fg: #06201d; --warn: #e0a64a;
+    --t-low: #9cbcf0; --t-low-bg: #1e2c44; --t-ok: #8fd6a2; --t-ok-bg: #19352263; --t-high: #ebc278; --t-high-bg: #3a2e14;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0f1716; --surface: #172221; --fg: #e5eeec; --muted: #94a6a3; --line: #2a3a38;
   --enamel: #e9e6da; --enamel-edge: #7f8f8c; --accent: #4fc2b8; --accent-soft: #1d3d3a; --accent-fg: #06201d; --warn: #e0a64a;
+  --t-low: #9cbcf0; --t-low-bg: #1e2c44; --t-ok: #8fd6a2; --t-ok-bg: #19352263; --t-high: #ebc278; --t-high-bg: #3a2e14;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -92,7 +100,7 @@ h2 { font-family: var(--f-display); font-weight: 500; font-size: 1.15rem; margin
 .tname { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; margin: 0; text-wrap: balance; }
 .tname small { display: block; font-family: var(--f-body); font-weight: 500; font-size: .95rem; color: var(--muted); margin-top: 4px; }
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
-label { display: block; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+label, .flabel { display: block; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 .inp { position: relative; }
 .inp input {
   width: 100%; font-family: var(--f-mono); font-size: 1.35rem; font-variant-numeric: tabular-nums;
@@ -100,24 +108,26 @@ label { display: block; font-size: 12px; font-weight: 600; letter-spacing: .04em
 }
 .inp input:focus { outline: none; border-color: var(--accent); }
 .inp .unit { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-family: var(--f-mono); font-size: 13px; pointer-events: none; }
+.refbox { border: 1.5px dashed var(--line); border-radius: 10px; padding: 8px 12px; font-family: var(--f-mono); font-size: 13px; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; gap: 2px; }
+.refbox b { font-weight: 600; }
 .hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
-.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: 12.5px; cursor: pointer; text-decoration: underline; }
 .mode { display: inline-block; font-family: var(--f-mono); font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-top: 14px; }
-
 .sexrow { margin-top: 18px; }
 .seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; }
 .seg button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border: 0; background: var(--bg); color: var(--fg); cursor: pointer; }
 .seg button + button { border-left: 1.5px solid var(--line); }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
 .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
 .result { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
 .result .lbl { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .big { font-family: var(--f-mono); font-weight: 600; font-size: clamp(2.6rem, 8vw, 3.4rem); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
 .big .u { font-size: 1.1rem; color: var(--muted); font-weight: 400; margin-left: 4px; }
-.range { font-family: var(--f-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+.tag { align-self: flex-start; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.tag.low { color: var(--t-low); background: var(--t-low-bg); }
+.tag.ok { color: var(--t-ok); background: var(--t-ok-bg); }
+.tag.high { color: var(--t-high); background: var(--t-high-bg); }
 .formula { font-family: var(--f-mono); font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; overflow-wrap: anywhere; }
-.ref { font-size: 13px; color: var(--muted); }
-.ref b { color: var(--fg); font-weight: 600; }
 .chu { font-size: 13px; border-top: 1px dashed var(--line); padding-top: 10px; }
 .chu .warn { color: var(--warn); }
 
@@ -157,16 +167,16 @@ tbody tr:hover { background: var(--accent-soft); }
 }
 @media (max-width: 420px) { .fields { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: no-preference) {
-  .tooth, .btn { transition: background-color .15s, border-color .15s; }
+  .tooth, .btn, .seg button { transition: background-color .15s, border-color .15s; }
 }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Mock-up · Exocad · Numeración FDI</div>
+    <div class="eyebrow">Mock-up · Exocad · Numeración FDI · Figun Garino</div>
     <h1>Calculadora de largo dental</h1>
-    <p>Elegí el diente en el odontograma, cargá su ancho mesiodistal y la calculadora te da el largo de corona según la proporción ancho/largo. Largo = ancho ÷ proporción.</p>
+    <p>Elegí el diente en el odontograma y cargá su ancho mesiodistal. El largo sale de una regla de tres con la tabla de referencia: (ancho del paciente ÷ ancho de referencia) × largo de referencia.</p>
   </header>
 
   <section class="card" aria-labelledby="h-odo">
@@ -186,31 +196,28 @@ tbody tr:hover { background: var(--accent-soft); }
         <div>
           <label for="w">Ancho mesiodistal</label>
           <div class="inp"><input id="w" type="number" inputmode="decimal" step="0.1" min="0" placeholder="0.0"><span class="unit">mm</span></div>
-          <div class="hint" id="wHint"></div>
         </div>
         <div>
-          <label for="r">Proporción A/L</label>
-          <div class="inp"><input id="r" type="number" inputmode="decimal" step="0.01" min="0.3" max="2"><span class="unit">×</span></div>
-          <div class="hint" id="rHint"></div>
+          <span class="flabel">Referencia</span>
+          <div class="refbox" id="refbox"></div>
         </div>
       </div>
       <span class="mode" id="mode"></span>
       <div class="sexrow">
-        <label id="sexLbl">Sexo del paciente</label>
+        <span class="flabel" id="sexLbl">Sexo del paciente</span>
         <div class="seg" id="sex" role="group" aria-labelledby="sexLbl">
           <button type="button" id="sexP" data-sex="p">Promedio</button>
           <button type="button" id="sexH" data-sex="h">Hombre</button>
           <button type="button" id="sexM" data-sex="m">Mujer</button>
         </div>
-        <div class="hint">Cambia la proporción de 13 a 23.</div>
+        <div class="hint">Cambia el largo de referencia de los anteriores (13 a 23 y 33 a 43).</div>
       </div>
     </div>
     <div class="result">
       <span class="lbl">Largo de corona</span>
       <div class="big" id="big">—</div>
-      <div class="range" id="range"></div>
+      <span class="tag" id="tag" hidden></span>
       <div class="formula" id="formula"></div>
-      <div class="ref" id="ref"></div>
       <div class="chu" id="chu" hidden></div>
     </div>
   </section>
@@ -228,7 +235,7 @@ tbody tr:hover { background: var(--accent-soft); }
     <div class="toast" id="toast"></div>
     <div class="tablewrap">
       <table>
-        <thead><tr><th>Diente</th><th>Nombre</th><th class="n">Ancho</th><th class="n">A/L</th><th class="n">Largo</th><th class="n">Rango</th></tr></thead>
+        <thead><tr><th>Diente</th><th>Nombre</th><th class="n">Ancho</th><th class="n">Largo</th><th>Clasificación</th></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
@@ -237,20 +244,21 @@ tbody tr:hover { background: var(--accent-soft); }
   </section>
 
   <section class="card notes">
-    <h2>De dónde salen las proporciones</h2>
+    <h2>De dónde salen los valores</h2>
     <ul>
-      <li><b>Anteriores superiores (13 a 23):</b> proporción de corona clínica, del margen gingival al borde incisal, según Sterrett et al. (1999). Central 0.85 en hombres y 0.86 en mujeres, lateral 0.76 y 0.79, canino 0.77 y 0.81. El promedio usa 0.86, 0.77 y 0.79.</li>
-      <li><b>Resto de los dientes:</b> proporción anatómica a partir de las medidas promedio de corona de Wheeler.</li>
-      <li><b>Rango:</b> ±5 % sobre la proporción de cada diente, porque los valores cambian según la población estudiada.</li>
-      <li><b>Referencia de Chu:</b> lateral = central − 2 mm de ancho, canino = central − 1 mm. Aparece cuando cargás el ancho del 11 o del 21.</li>
-      <li>La proporción se puede cambiar a mano en cada diente. Alargar las coronas no equivale a recuperar la DVO: confirmala con reposo, fonética y espacio libre.</li>
+      <li><b>Fórmula:</b> largo = (ancho del paciente ÷ ancho de referencia) × largo de referencia. Es una regla de tres: el diente del paciente conserva la proporción del diente de referencia.</li>
+      <li><b>Anteriores superiores:</b> Figun Garino con promedios por sexo. Central 9.0 mm de ancho y 10.2 mm de largo en hombres o 9.6 mm en mujeres. Lateral 6.4 × 8.3 / 7.8. Canino 8.0 × 9.7 / 8.85.</li>
+      <li><b>Anteriores inferiores:</b> Figun Garino con estimación por sexo (±3–4 %). Central 5.4 × 9.1 / 8.5. Lateral 5.9 × 9.9 / 9.3. Canino 6.9 × 10.7 / 9.9. Usar como punto de partida.</li>
+      <li><b>Promedio:</b> usa el punto medio entre el largo de hombre y el de mujer.</li>
+      <li><b>Premolares y molares:</b> tabla de Figun Garino sin diferencia por sexo (cervico-incisal y diámetro M-D).</li>
+      <li><b>Clasificación:</b> en anteriores, centrales entre 9.5 y 10.5 mm, caninos entre 9.0 y 10.5 mm y laterales entre 7.8 y 8.8 mm son "Equilibrado"; por debajo, "Delicado/Juvenil"; por encima, "Dominante". En posteriores, menos de 7.5 mm es rango corto, hasta 10.5 mm normal y más, largo.</li>
+      <li>Los promedios son guías de diseño. Priorizá la cara, el labio, la línea de sonrisa y el biotipo del paciente.</li>
     </ul>
   </section>
 </div>
 
 <script>
 (function () {
-  // Medidas promedio de corona (Wheeler): [ancho MD, largo cervico-incisal] en mm
   var TYPES = {
     1: { n: "Incisivo central", cls: "t-inc" },
     2: { n: "Incisivo lateral", cls: "t-inc" },
@@ -261,15 +269,10 @@ tbody tr:hover { background: var(--accent-soft); }
     7: { n: "Segundo molar", cls: "t-mol" },
     8: { n: "Tercer molar", cls: "t-mol" }
   };
-  var AVG = {
-    up: { 1: [8.5, 10.5], 2: [6.5, 9.0], 3: [7.5, 10.0], 4: [7.0, 8.5], 5: [6.5, 8.5], 6: [10.0, 7.5], 7: [9.0, 7.0], 8: [8.5, 6.5] },
-    lo: { 1: [5.0, 9.0], 2: [5.5, 9.5], 3: [7.0, 11.0], 4: [7.0, 8.5], 5: [7.0, 8.0], 6: [11.0, 7.5], 7: [10.5, 7.0], 8: [10.0, 7.0] }
-  };
-  // Corona clínica de anteriores superiores (Sterrett et al. 1999): proporción A/L por sexo
-  var STERRETT = {
-    1: { h: 0.85, m: 0.86, p: 0.86 },
-    2: { h: 0.76, m: 0.79, p: 0.77 },
-    3: { h: 0.77, m: 0.81, p: 0.79 }
+  // Figun Garino: [ancho M-D de referencia, largo hombre, largo mujer]; posteriores sin diferencia por sexo
+  var REF = {
+    up: { 1: [9.0, 10.2, 9.6], 2: [6.4, 8.3, 7.8], 3: [8.0, 9.7, 8.85], 4: [7.0, 8.5], 5: [7.0, 8.5], 6: [10.0, 7.5], 7: [9.0, 7.0], 8: [8.5, 6.5] },
+    lo: { 1: [5.4, 9.1, 8.5], 2: [5.9, 9.9, 9.3], 3: [6.9, 10.7, 9.9], 4: [7.0, 8.5], 5: [7.0, 8.0], 6: [11.0, 7.5], 7: [10.5, 7.0], 8: [10.0, 7.0] }
   };
   var SEX = { p: "Promedio", h: "Hombre", m: "Mujer" };
   var QUADS = [
@@ -283,24 +286,36 @@ tbody tr:hover { background: var(--accent-soft); }
   function info(fdi) {
     var q = Math.floor(fdi / 10), p = fdi % 10, upper = q <= 2;
     var side = (q === 1 || q === 4) ? "derecho" : "izquierdo";
-    var avg = AVG[upper ? "up" : "lo"][p];
-    var st = upper && STERRETT[p];
-    var ideal, mode;
-    if (st) { ideal = st[state.sex]; mode = "Corona clínica (Sterrett) · " + SEX[state.sex]; }
-    else { ideal = Math.round(avg[0] / avg[1] * 100) / 100; mode = "Proporción anatómica (Wheeler)"; }
-    var min = ideal * 0.95, max = ideal * 1.05;
+    var ref = REF[upper ? "up" : "lo"][p], ant = p <= 3;
+    var lc = !ant ? ref[1] : state.sex === "h" ? ref[1] : state.sex === "m" ? ref[2] : (ref[1] + ref[2]) / 2;
     return {
-      fdi: fdi, p: p, upper: upper, type: TYPES[p],
+      fdi: fdi, p: p, upper: upper, ant: ant, type: TYPES[p],
       name: TYPES[p].n + " " + (upper ? "superior" : "inferior") + " " + side,
-      avg: avg, ideal: ideal, min: min, max: max, mode: mode
+      md: ref[0], lc: lc,
+      mode: ant ? "Figun Garino · " + SEX[state.sex] : "Figun Garino · tabla posteriores"
     };
   }
+  function lengthOf(fdi) { var i = info(fdi); return state.w[fdi] / i.md * i.lc; }
 
-  var state = { sel: 11, w: {}, r: {}, sex: "p" };
+  // Clasificación de la calculadora de referencia
+  function classify(L, i) {
+    if (i.ant) {
+      var lo = i.p === 1 ? 9.5 : i.p === 3 ? 9.0 : 7.8;
+      var hi = i.p === 1 ? 10.5 : i.p === 3 ? 10.5 : 8.8;
+      if (L < lo) return { cls: "low", label: "Delicado/Juvenil" };
+      if (L <= hi) return { cls: "ok", label: "Equilibrado" };
+      return { cls: "high", label: "Dominante" };
+    }
+    if (L < 7.5) return { cls: "low", label: "Rango corto" };
+    if (L <= 10.5) return { cls: "ok", label: "Rango normal" };
+    return { cls: "high", label: "Rango largo" };
+  }
+
+  var state = { sel: 11, w: {}, sex: "p" };
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || "null");
     if (saved && typeof saved === "object") {
-      state.sel = saved.sel || 11; state.w = saved.w || {}; state.r = saved.r || {};
+      state.sel = saved.sel || 11; state.w = saved.w || {};
       if (SEX[saved.sex]) state.sex = saved.sex;
     }
   } catch (e) {}
@@ -310,10 +325,10 @@ tbody tr:hover { background: var(--accent-soft); }
     state.w = { 11: 8.5, 12: 6.6, 13: 7.6 };
   }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ sel: state.sel, w: state.w, r: state.r, sex: state.sex })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ sel: state.sel, w: state.w, sex: state.sex })); } catch (e) {}
   }
   function fmt(n, d) { return Number(n).toFixed(d == null ? 2 : d); }
-  function ratioOf(fdi) { var i = info(fdi); return state.r[fdi] || i.ideal; }
+  function trim(n) { return String(Math.round(n * 1000) / 1000); }
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -329,7 +344,7 @@ tbody tr:hover { background: var(--accent-soft); }
         var i = info(fdi);
         var b = document.createElement("button");
         b.type = "button"; b.className = "tooth " + i.type.cls; b.id = "t" + fdi;
-        b.style.flex = i.avg[0] + " 1 0";
+        b.style.flex = i.md + " 1 0";
         b.setAttribute("aria-label", fdi + " " + i.name);
         b.title = fdi + " · " + i.name;
         b.innerHTML = '<span class="num">' + fdi + '</span><span class="crown"></span>';
@@ -355,51 +370,40 @@ tbody tr:hover { background: var(--accent-soft); }
 
   function select(fdi, focusInput) {
     state.sel = fdi; save();
-    var i = info(fdi);
     $("w").value = state.w[fdi] != null ? state.w[fdi] : "";
-    $("r").value = fmt(ratioOf(fdi));
     paintChart(); renderResult();
     if (focusInput && window.matchMedia("(min-width: 761px)").matches) $("w").focus();
   }
 
   function renderResult() {
-    var fdi = state.sel, i = info(fdi);
-    var w = state.w[fdi], r = ratioOf(fdi), custom = !!state.r[fdi];
+    var fdi = state.sel, i = info(fdi), w = state.w[fdi];
     $("tname").innerHTML = fdi + " · " + i.type.n + "<small>" + i.name.replace(i.type.n + " ", "") + "</small>";
-    $("mode").textContent = custom ? "Proporción personalizada" : i.mode;
-    $("wHint").textContent = "Promedio: " + fmt(i.avg[0], 1) + " mm";
-    $("rHint").innerHTML = custom
-      ? 'Sugerida: ' + fmt(i.ideal) + ' · <button type="button" class="linkbtn" id="resetR">restablecer</button>'
-      : "Rango " + fmt(i.min) + " – " + fmt(i.max);
-    var rb = $("resetR");
-    if (rb) rb.addEventListener("click", function () { delete state.r[fdi]; save(); select(fdi); renderTable(); });
+    $("mode").textContent = i.mode;
+    $("refbox").innerHTML = "<span>Ø M-D <b>" + fmt(i.md, 1) + " mm</b></span><span>Largo <b>" + trim(i.lc) + " mm</b></span>";
 
+    var tag = $("tag");
     if (w > 0) {
-      var L = w / r;
-      $("big").innerHTML = fmt(L) + '<span class="u">mm</span>';
-      $("range").textContent = custom ? "" : "Rango: " + fmt(w / i.max) + " – " + fmt(w / i.min) + " mm";
-      $("formula").textContent = fmt(w) + " mm ÷ " + fmt(r) + " = " + fmt(L) + " mm";
+      var L = lengthOf(fdi), c = classify(L, i);
+      $("big").innerHTML = fmt(L, 1) + '<span class="u">mm</span>';
+      tag.className = "tag " + c.cls; tag.textContent = c.label; tag.hidden = false;
+      $("formula").textContent = "(" + fmt(w) + " ÷ " + fmt(i.md, 1) + ") × " + trim(i.lc) + " = " + fmt(L) + " mm";
     } else {
-      $("big").textContent = "—";
-      $("range").textContent = "";
+      $("big").textContent = "—"; tag.hidden = true;
       $("formula").textContent = "Cargá el ancho para calcular el largo.";
     }
-    $("ref").innerHTML = "Corona promedio (Wheeler): <b>" + fmt(i.avg[0], 1) + " × " + fmt(i.avg[1], 1) + " mm</b> (ancho × largo)";
 
     // Referencia de Chu para laterales y caninos superiores
     var chu = $("chu");
     if (i.upper && (i.p === 2 || i.p === 3)) {
-      var cen = state.w[Math.floor(fdi / 10) * 10 + 1] || state.w[fdi < 20 ? 21 : 11];
-      var cenFdi = state.w[Math.floor(fdi / 10) * 10 + 1] ? Math.floor(fdi / 10) * 10 + 1 : (fdi < 20 ? 21 : 11);
-      if (cen) {
-        var exp = cen - (i.p === 2 ? 2 : 1);
-        var txt = "Chu (desde el central " + cenFdi + " de " + fmt(cen) + " mm): ancho esperado <b>" + fmt(exp) + " mm</b> → largo " + fmt(exp / r) + " mm.";
+      var same = Math.floor(fdi / 10) * 10 + 1, other = fdi < 20 ? 21 : 11;
+      var cenFdi = state.w[same] ? same : state.w[other] ? other : null;
+      if (cenFdi) {
+        var cen = state.w[cenFdi], exp = cen - (i.p === 2 ? 2 : 1);
+        var txt = "Chu (desde el central " + cenFdi + " de " + fmt(cen) + " mm): ancho esperado <b>" + fmt(exp) + " mm</b>.";
         if (w > 0 && Math.abs(w - exp) > 0.5) txt += ' <span class="warn">El ancho cargado difiere ' + fmt(Math.abs(w - exp), 1) + " mm del esperado.</span>";
-        chu.innerHTML = txt; chu.hidden = false;
-      } else {
-        chu.innerHTML = "Cargá el ancho del central (11 o 21) para ver la referencia de Chu.";
-        chu.hidden = false;
-      }
+        chu.innerHTML = txt;
+      } else chu.innerHTML = "Cargá el ancho del central (11 o 21) para ver la referencia de Chu.";
+      chu.hidden = false;
     } else chu.hidden = true;
   }
 
@@ -413,10 +417,10 @@ tbody tr:hover { background: var(--accent-soft); }
     var rows = sortedTeeth(), tb = $("tbody");
     tb.innerHTML = "";
     rows.forEach(function (fdi) {
-      var i = info(fdi), w = state.w[fdi], r = ratioOf(fdi), custom = !!state.r[fdi];
+      var i = info(fdi), L = lengthOf(fdi), c = classify(L, i);
       var tr = document.createElement("tr");
-      tr.innerHTML = "<td><b>" + fdi + "</b></td><td>" + i.name + "</td><td class='n'>" + fmt(w) + "</td><td class='n'>" + fmt(r) +
-        "</td><td class='n'><b>" + fmt(w / r) + "</b></td><td class='n'>" + (custom ? "—" : fmt(w / i.max) + "–" + fmt(w / i.min)) + "</td>";
+      tr.innerHTML = "<td><b>" + fdi + "</b></td><td>" + i.name + "</td><td class='n'>" + fmt(state.w[fdi]) +
+        "</td><td class='n'><b>" + fmt(L, 1) + "</b></td><td><span class='tag " + c.cls + "'>" + c.label + "</span></td>";
       tr.addEventListener("click", function () { select(fdi, true); window.scrollTo({ top: 0, behavior: "smooth" }); });
       tb.appendChild(tr);
     });
@@ -425,7 +429,7 @@ tbody tr:hover { background: var(--accent-soft); }
   }
 
   function clearExample() {
-    if (state.example) { state.example = false; state.w = {}; state.r = {}; paintChart(); }
+    if (state.example) { state.example = false; state.w = {}; paintChart(); }
   }
 
   $("w").addEventListener("input", function () {
@@ -433,12 +437,6 @@ tbody tr:hover { background: var(--accent-soft); }
     var v = parseFloat(this.value.replace(",", "."));
     if (v > 0) state.w[state.sel] = v; else delete state.w[state.sel];
     save(); paintChart(); renderResult(); renderTable();
-  });
-  $("r").addEventListener("input", function () {
-    var v = parseFloat(this.value.replace(",", "."));
-    var i = info(state.sel);
-    if (v > 0 && Math.abs(v - i.ideal) > 0.0001) state.r[state.sel] = v; else delete state.r[state.sel];
-    save(); renderResult(); renderTable();
   });
 
   function paintSex() {
@@ -448,16 +446,16 @@ tbody tr:hover { background: var(--accent-soft); }
   }
   Array.prototype.forEach.call(document.querySelectorAll("#sex button"), function (b) {
     b.addEventListener("click", function () {
-      state.sex = b.dataset.sex; save(); paintSex(); select(state.sel); renderTable();
+      state.sex = b.dataset.sex; save(); paintSex(); renderResult(); renderTable();
     });
   });
 
   $("copy").addEventListener("click", function () {
     var rows = sortedTeeth();
     if (!rows.length) { $("toast").textContent = "No hay medidas para copiar. Cargá al menos un ancho."; return; }
-    var text = "Largos de corona (largo = ancho ÷ proporción A/L) · Paciente: " + SEX[state.sex] + "\n" + rows.map(function (fdi) {
-      var i = info(fdi), w = state.w[fdi], r = ratioOf(fdi);
-      return fdi + " " + i.name + ": ancho " + fmt(w) + " mm → largo " + fmt(w / r) + " mm (A/L " + fmt(r) + ")";
+    var text = "Largos de corona (Figun Garino) · Paciente: " + SEX[state.sex] + "\n" + rows.map(function (fdi) {
+      var i = info(fdi), L = lengthOf(fdi);
+      return fdi + " " + i.name + ": ancho " + fmt(state.w[fdi]) + " mm → largo " + fmt(L, 1) + " mm (" + classify(L, i).label + ")";
     }).join("\n");
     var fb = $("copyFallback");
     function fallback() {
@@ -477,7 +475,7 @@ tbody tr:hover { background: var(--accent-soft); }
   function closeConfirm() { $("clear").hidden = false; $("clearYes").hidden = true; $("clearNo").hidden = true; }
   $("clearNo").addEventListener("click", closeConfirm);
   $("clearYes").addEventListener("click", function () {
-    state.w = {}; state.r = {}; state.example = false; save(); closeConfirm();
+    state.w = {}; state.example = false; save(); closeConfirm();
     select(state.sel); renderTable(); $("toast").textContent = "Medidas borradas.";
   });
 
