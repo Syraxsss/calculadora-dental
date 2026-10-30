@@ -170,9 +170,47 @@ tbody tr:hover { background: var(--accent-soft); }
   .quad.lower { padding-top: 6px; }
   .quad.q2 { border-bottom: 1px dashed var(--line); padding-bottom: 14px; margin-bottom: 8px; }
   .quad.left .qlabel { text-align: left; }
-  .calc { grid-template-columns: 1fr; }
+
+  /* Celular: encabezado y odontograma compactos, panel de cálculo fijo abajo */
+  body { padding-block: 14px calc(var(--dock-h, 230px) + 20px); }
+  .wrap { gap: 14px; }
+  header .eyebrow, header p { display: none; }
+  header h1 { font-size: 1.35rem; margin: 0; }
+  .card { padding: 14px; }
+  #h-odo, .legend { display: none; }
+  .quad { padding: 2px 0; gap: 2px; }
+  .quad.upper { padding-bottom: 2px; }
+  .quad.lower { padding-top: 2px; }
+  .quad.q2 { padding-bottom: 8px; margin-bottom: 6px; }
+  .qlabel { font-size: 9.5px; }
+  .row { gap: 2px; }
+  .tooth { min-width: 0; padding: 3px 0; gap: 3px; }
+  .tooth .num { font-size: 11px; }
+  .crown { height: 22px; }
+  .t-pm .crown, .t-mol .crown { height: 20px; }
+  .upper .t-inc .crown, .upper .t-can .crown { height: 27px; }
+
+  .calc {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    border-width: 1px 0 0; border-radius: 16px 16px 0 0;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, .14);
+    padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    grid-template-columns: 1fr 1fr; gap: 8px 14px; align-items: center;
+    grid-template-areas: "name name" "sex sex" "w big" "w tag" "form form";
+  }
+  .calc > div:first-child, .fields, .result, .sexrow { display: contents; }
+  .tname { grid-area: name; font-size: 1.05rem; }
+  .tname small { display: inline; margin: 0 0 0 4px; font-size: .85rem; }
+  .fields > div:first-child { grid-area: w; }
+  .fields > div:nth-child(2), .mode, .sexrow > .flabel, .sexrow > .hint, .result .lbl, .chu { display: none; }
+  label[for="w"] { font-size: 11px; margin-bottom: 4px; }
+  .inp input { font-size: 1.25rem; padding: 8px 40px 8px 10px; }
+  #sex { grid-area: sex; display: flex; }
+  #sex button { flex: 1; padding: 7px 6px; font-size: 13px; }
+  .big { grid-area: big; font-size: 2.3rem; }
+  .tag { grid-area: tag; align-self: start; justify-self: start; }
+  .formula { grid-area: form; border-top: 0; padding-top: 0; font-size: 12px; }
 }
-@media (max-width: 420px) { .fields { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: no-preference) {
   .tooth, .btn, .seg button { transition: background-color .15s, border-color .15s; }
 }
@@ -493,6 +531,15 @@ tbody tr:hover { background: var(--accent-soft); }
     state.w = {}; state.example = false; save(); closeConfirm();
     select(state.sel); renderTable(); $("toast").textContent = "Medidas borradas.";
   });
+
+  // En el celular el panel queda fijo abajo: reservar su alto al final de la página
+  var calc = document.querySelector(".calc");
+  function fitDock() {
+    var fixed = getComputedStyle(calc).position === "fixed";
+    document.body.style.setProperty("--dock-h", (fixed ? calc.offsetHeight : 0) + "px");
+  }
+  if (window.ResizeObserver) new ResizeObserver(fitDock).observe(calc);
+  window.addEventListener("resize", fitDock);
 
   buildChart();
   paintSex();
