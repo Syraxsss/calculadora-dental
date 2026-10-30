@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0d6b66"/>
+  <!-- corona de incisivo central -->
+  <path d="M186 128 C186 112 198 104 214 104 L298 104 C314 104 326 112 326 128 L334 318 C336 352 318 372 290 376 L222 376 C194 372 176 352 178 318 Z" fill="#fbfaf4"/>
+  <!-- regla de largo -->
+  <g stroke="#d5ece9" stroke-width="10" stroke-linecap="round">
+    <line x1="374" y1="104" x2="374" y2="376"/>
+    <line x1="374" y1="104" x2="400" y2="104"/>
+    <line x1="374" y1="172" x2="392" y2="172"/>
+    <line x1="374" y1="240" x2="400" y2="240"/>
+    <line x1="374" y1="308" x2="392" y2="308"/>
+    <line x1="374" y1="376" x2="400" y2="376"/>
+  </g>
+  <!-- regla de ancho -->
+  <g stroke="#d5ece9" stroke-width="10" stroke-linecap="round">
+    <line x1="186" y1="414" x2="326" y2="414"/>
+    <line x1="186" y1="398" x2="186" y2="430"/>
+    <line x1="326" y1="398" x2="326" y2="430"/>
+  </g>
+</svg>
